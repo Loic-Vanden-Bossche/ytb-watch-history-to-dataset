@@ -1,5 +1,6 @@
 import os
 
+
 def get_last_processed_index(output_file):
     progress_file = f"{output_file}.progress"
     if os.path.exists(progress_file):

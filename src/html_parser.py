@@ -25,7 +25,8 @@ def parse_html(input_file, output_file, resume=False):
     if resume:
         last_processed_index = get_last_processed_index(output_file)
         if last_processed_index is None:
-            print(f"{Fore.YELLOW}Unable to determine the last processed index. Resuming from the beginning.{Style.RESET_ALL}")
+            print(
+                f"{Fore.YELLOW}Unable to determine the last processed index. Resuming from the beginning.{Style.RESET_ALL}")
             last_processed_index = 0
         else:
             last_processed_index += 1
@@ -36,7 +37,8 @@ def parse_html(input_file, output_file, resume=False):
 
         if last_processed_index == 0:
             writer.writerow(
-                ['url', 'watch_timestamp', 'video_id', 'fulltitle', 'thumbnail', 'description', 'channel_id', 'duration',
+                ['url', 'watch_timestamp', 'video_id', 'fulltitle', 'thumbnail', 'description', 'channel_id',
+                 'duration',
                  'view_count', 'age_limit', 'categories', 'tags', 'live_status', 'release_timestamp', 'comment_count',
                  'heatmap', 'like_count', 'channel', 'channel_follower_count', 'channel_is_verified'])
 
@@ -46,7 +48,8 @@ def parse_html(input_file, output_file, resume=False):
 
         with ThreadPoolExecutor(max_workers=16) as executor:
             future_to_url = {executor.submit(get_metadata,
-                                             div.find('a', href=re.compile(r'https://www.youtube.com/watch\?v=.+'))['href']): div for div in divs if
+                                             div.find('a', href=re.compile(r'https://www.youtube.com/watch\?v=.+'))[
+                                                 'href']): div for div in divs if
                              div.find('a', href=re.compile(r'https://www.youtube.com/watch\?v=.+'))}
 
             for index, future in enumerate(as_completed(future_to_url), start=last_processed_index):
@@ -100,6 +103,7 @@ def parse_html(input_file, output_file, resume=False):
                     estimated_remaining_time = average_processing_time * remaining_videos
 
                     time_str = format_estimated_time(estimated_remaining_time)
-                    print(f'{Fore.CYAN}{index + 1}/{total_videos} {Fore.MAGENTA}avg.{"%.2f" % average_processing_time}s {Fore.YELLOW}{time_str}{Style.RESET_ALL}')
+                    print(
+                        f'{Fore.CYAN}{index + 1}/{total_videos} {Fore.MAGENTA}avg.{"%.2f" % average_processing_time}s {Fore.YELLOW}{time_str}{Style.RESET_ALL}')
 
     print(f"{Fore.GREEN}Parsing complete.{Style.RESET_ALL}")
